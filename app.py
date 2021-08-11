@@ -23,6 +23,7 @@ def handle_validation_error(error):
 api.add_resource(User, '/users/<int:id>')
 api.add_resource(UserList, '/users')
 api.add_resource(ProductList, '/products')
+api.add_resource(ProductList, '/products/<int:id>')
 api.add_resource(BuyProduct, '/buy_products')
 
 api.add_resource(LoginUser, '/login')

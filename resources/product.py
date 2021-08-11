@@ -33,15 +33,25 @@ item = product_ns.model('Product', {
 })
 
 class Product(Resource):
-	def get(self, id):
-		product_data = ProductModel.find_by_id(id)
-		if product_data:
-			return product_schema.dump(product_data)
-		return {'message': ITEM_NOT_FOUND}, 404
+	def get(self):
+		process = subprocess.Popen('scrapy runspider productslist/productslist/spiders/products.py', shell=True)
+		process.wait()
+		return "Produtos adicionados"
 
 class ProductList(Resource):
 	@product_ns.doc('Get all the Items')
 	def get(self):
+		return product_list_schema.dump(ProductModel.find_all()), 200
+
+	def put(self):
 		process = subprocess.Popen('scrapy runspider productslist/productslist/spiders/products.py', shell=True)
 		process.wait()
-		return product_list_schema.dump(ProductModel.find_all()), 200
+		return "Produtos adicionados"
+
+	def delete(self, id):
+		product_data = ProductModel.find_by_id(id)
+		if(product_data):
+			product_data.delete_to_db()
+			return product_schema.dump(product_data)
+		else:
+			return {'message': ITEM_NOT_FOUND}, 404

@@ -37,3 +37,7 @@ class ProductModel(dbp.Model):
 	def save_to_db(self) -> None:
 		dbp.session.add(self)
 		dbp.session.commit()
+
+	def delete_to_db(self) -> None:
+		dbp.session.delete(self)
+		dbp.session.commit()
