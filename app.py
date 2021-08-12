@@ -22,8 +22,19 @@ def handle_validation_error(error):
 
 api.add_resource(User, '/users/<int:id>')
 api.add_resource(UserList, '/users')
-api.add_resource(ProductList, '/products')
-api.add_resource(ProductList, '/products/<int:id>')
+
+#patch - add itens on database
+api.add_resource(Product, '/add-product')
+#delete - Delete itens on databse
+api.add_resource(Product, '/product/<int:id>')
+
+#put - uptade a product
+api.add_resource(Product, '/product/<int:id>')
+
+#get - Get all de products
+api.add_resource(ProductList, '/product')
+
+
 api.add_resource(BuyProduct, '/buy_products')
 
 api.add_resource(LoginUser, '/login')

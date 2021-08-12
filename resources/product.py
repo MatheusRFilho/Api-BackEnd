@@ -33,17 +33,7 @@ item = product_ns.model('Product', {
 })
 
 class Product(Resource):
-	def get(self):
-		process = subprocess.Popen('scrapy runspider productslist/productslist/spiders/products.py', shell=True)
-		process.wait()
-		return "Produtos adicionados"
-
-class ProductList(Resource):
-	@product_ns.doc('Get all the Items')
-	def get(self):
-		return product_list_schema.dump(ProductModel.find_all()), 200
-
-	def put(self):
+	def patch(self):
 		process = subprocess.Popen('scrapy runspider productslist/productslist/spiders/products.py', shell=True)
 		process.wait()
 		return "Produtos adicionados"
@@ -51,7 +41,44 @@ class ProductList(Resource):
 	def delete(self, id):
 		product_data = ProductModel.find_by_id(id)
 		if(product_data):
-			product_data.delete_to_db()
-			return product_schema.dump(product_data)
+			# product_data.delete_to_db()
+			return product_schema.dump(product_data), 200
 		else:
 			return {'message': ITEM_NOT_FOUND}, 404
+
+	@product_ns.expect(item)
+	@product_ns.doc('Update an Item')
+	def put(self, id):
+		product_data = ProductModel.find_by_id(id)
+		product_json = request.get_json()
+		
+		if(product_data):
+			product_data.id = id
+			try:			
+				if('title' in product_json):
+					product_data.title = product_json['title']
+				if('price' in product_json):
+					product_data.price = product_json['price']
+				if('description' in product_json):
+					product_data.description = product_json['description']
+
+				product_data.save_to_db()
+				
+				return product_schema.dump(product_data), 200
+
+			except Exception as e:
+				return {'message': ITEM_NOT_FOUND}, 404
+		else:
+			return {'message': ITEM_NOT_FOUND}, 404
+
+
+
+class ProductList(Resource):
+	@product_ns.doc('Get all the Items')
+	def get(self):
+		return product_list_schema.dump(ProductModel.find_all()), 200
+
+
+
+
+
