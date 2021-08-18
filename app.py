@@ -15,6 +15,10 @@ from server.instance import server
 api = server.api
 app = server.app
 
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 @api.errorhandler(ValidationError)
 def handle_validation_error(error):
     return jsonify(error.messages), 400

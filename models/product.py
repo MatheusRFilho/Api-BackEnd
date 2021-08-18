@@ -1,14 +1,15 @@
-from db import dbp
+from db import db
 from typing import List
 
 
-class ProductModel(dbp.Model):
+class ProductModel(db.Model):
 	__tablename__ = "products"
 
-	id = dbp.Column(dbp.Integer, primary_key=True)
-	title = dbp.Column(dbp.String(50), nullable=False)
-	price = dbp.Column(dbp.String(20), nullable=False)
-	description = dbp.Column(dbp.String(200), nullable=False)
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(50), nullable=False)
+	price = db.Column(db.String(20), nullable=False)
+	description = db.Column(db.String(200), nullable=False)
+	image = db.Column(db.String(400), nullable=True)
 
 
 	def __init__(self, title, price, description):
@@ -35,9 +36,9 @@ class ProductModel(dbp.Model):
 		return cls.query.all()
 
 	def save_to_db(self) -> None:
-		dbp.session.add(self)
-		dbp.session.commit()
+		db.session.add(self)
+		db.session.commit()
 
 	def delete_to_db(self) -> None:
-		dbp.session.delete(self)
-		dbp.session.commit()
+		db.session.delete(self)
+		db.session.commit()
