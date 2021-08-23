@@ -27,7 +27,14 @@ class ProductsSpider(scrapy.Spider):
 			notebookImages = i.xpath('//img[@class="img-responsive"]').get()
 
 
+			# yield{
+			# 	'title': notebookTitle.split('\"')[5],
+			# 	'price': notebookPrice[0],
+			# 	'description': notebookDescription,
+			# 	'image': 'https://webscraper.io' + notebookImages.split('\"')[5]
+			# }
+
 			if(notebookTitle.split('\"')[5].find('Lenovo') == 0):
-				dados = ('"' + notebookTitle.split('\"')[5] + '"', '"' + notebookPrice[0] + '"', '"' + notebookDescription + '"', '"' + notebookImages.split('\"')[5] + '"')
+				dados = ('"' + notebookTitle.split('\"')[5] + '"', '"' + notebookPrice[0] + '"', '"' + notebookDescription + '"', '"' + 'https://webscraper.io' + notebookImages.split('\"')[5] + '"')
 				cursor.execute(comando_sql, dados)
 				banco.commit()
